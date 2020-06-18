@@ -1,26 +1,21 @@
-a = input()
-a = int(a)
-if(a>0):
-    inta = a % -2147483648
-    b = 18218081
-    c = 281474976710656
-    d = 7847617
-    howtonotmakeanrce = (a >> 32)
-    e = ((((d*(((24667315*(howtonotmakeanrce)+b*inta+67552711)>>32))-b*(((-4824621*howtonotmakeanrce+d*inta+d)>>32))-11))*246154705703781 % 9223372036854775808))%281474976710656
-
-    if((((((25214903917*e+11)%9223372036854775808))%281474976710656>>16)<<32)+((((205749139540585*e+277363943098)%-281474976710656)>>16)))==a:
-        print("Valid Seed")
-    else:
-        print("Invalid Seed")
+import struct
+worldSeed = int(input())
+if worldSeed > 0:
+    upperBits = worldSeed >> 32
 else:
-    inta = a % -2147483648
-    b = 18218081
-    c = 281474976710656
-    d = 7847617
-    howtonotmakeanrce = (a >> 32)+(2 << 31)
-    e = ((((d*(((24667315*(howtonotmakeanrce)+b*inta+67552711)>>32))-b*(((-4824621*howtonotmakeanrce+d*inta+d)>>32))-11))*246154705703781 % -9223372036854775808))%-281474976710656
-
-    if(((((((25214903917*e+11) % 9223372036854775808))%-281474976710656)>>16)<<32)+(((205749139540585*e+277363943098)%-281474976710656)>>16))==a:
-        print("Valid Seed")
+    upperBits = (worldSeed >> 32)+(2 << 31)
+lowerBits = worldSeed & ((1 << 32)-1)
+a = (24667315 * upperBits + 18218081 * lowerBits + 67552711) >> 32
+b = (-4824621 * upperBits + 7847617 * lowerBits + 7847617) >> 32
+seed = 7847617 * a - 18218081 * b
+if seed > 0:
+    if(((seed * 25214903917 + 11) & ((1 << 48) - 1))) > 0:
+        nextLong = ((struct.unpack("@q",struct.pack("@Q",(seed >> 16 << 32)))[0]) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))
     else:
-        print("Invalid Seed")
+        nextLong = ((seed >> 16 << 32) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15))
+else:
+    if(((seed * 25214903917 + 11) & ((1 << 48) - 1))) > 0:
+        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))
+    else:
+        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15))
+print(nextLong==worldSeed)
