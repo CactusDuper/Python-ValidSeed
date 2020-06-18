@@ -12,13 +12,13 @@ if seed > 0:
     if(((seed * 25214903917 + 11) & ((1 << 48) - 1))) > 0:
         nextLong = ((struct.unpack("@q",struct.pack("@Q",(seed >> 16 << 32)))[0]) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16)%-2147483648)
         nextLong2 = ((struct.unpack("@q",struct.pack("@Q",(seed >> 16 << 32)))[0]) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16)%2147483648)
-    else:
-        nextLong = ((seed >> 16 << 32) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15))
-else:
-    if(((seed * 25214903917 + 11) & ((1 << 48) - 1))) > 0:
-        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))
-    else:
-        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15))
+    else: # this might not be needed?
+        nextLong = ((seed >> 16 << 32) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15)) # this might not be needed?
+else: # this might not be needed?
+    if(((seed * 25214903917 + 11) & ((1 << 48) - 1))) > 0: # this might not be needed?
+        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + (((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16)) # this might not be needed?
+    else: # this might not be needed?
+        nextLong = (((((seed >> 16)+(2<<15)) << 32)) + ((((seed * 25214903917 + 11) & ((1 << 48) - 1)) >> 16))+(2 <<15)) # this might not be needed?
 if(nextLong != worldSeed):
     if(nextLong2 == worldSeed):
         print("Valid Seed")
